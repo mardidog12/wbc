@@ -1,0 +1,51 @@
+<template name="invitationsTemplate">
+	<div class="invitations">
+		<p>Click this button to generate an invite key to send to those who want access to your world</p>
+		<button class="btn btn-default generateInvite">Generate Invite</button>
+		<div class="inviteList table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Invite Key</th>
+						<th>Invite Link</th>
+						<th>Accepted</th>
+						<th>Accepted By</th>
+						<th>Revoke Permissions</th>
+					</tr>
+				</thead>
+				<tbody>
+				{{#each invites}}
+					<tr>
+						<td>{{@index}}</td>
+						<td>{{_id}}</td>
+						<td><a href="{{rootURL}}{{invitePath}}">{{rootURL}}{{invitePath}}</a></td>
+						<td>{{accepted}}</td>
+						<td>{{acceptedBy}}</td>
+						<td><form class="revoke"><input type="hidden" name="id" value="{{_id}}"><input type="submit" class="btn btn-link" value="Revoke Permission"></form></td>
+					</tr>
+				{{/each}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</template>
+
+<template name="invitationsAccept">
+	<div class="container">
+		<h1>Join a World!</h1>
+		{{#if accepted}}
+			<h3>This invite has already been accepted</h3>
+		{{else}}
+			<h3>You have been invited by {{invitee}}  to join his/her world.</h3>
+			{{#if currentUser}}
+				<button class="btn btn-success btn-accept">Accept</button>
+				<button class="btn btn-danger btn-deny">Deny</button>
+			{{else}}
+				<p>Please Sign in to Continue</p>
+			{{/if}}
+		{{/if}}
+	</div>
+
+</template>

@@ -1,0 +1,21 @@
+<template name="map">
+    <div id="container pusher">
+    {{#each currentMap}}
+      <h1 class="title">{{name}}</h1>
+      {{#if mapOwner}}
+      <a href="{{_id}}/settings"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
+      {{/if}}
+      <p>{{info}}</p>
+    {{/each}}
+    {{> subscribe}}
+    {{#if registeredUser}}
+      <div id="map" class="map"></div>
+      <div class="notice">
+        Double-click on map creates a marker<br>
+      </div>
+    {{/if}}
+    </div>
+    <div>
+    {{> mapCommentTemplate}}
+    </div>
+</template>

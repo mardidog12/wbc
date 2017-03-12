@@ -1,0 +1,68 @@
+<template name="mapSettings">
+{{#if mapOwner}}
+<div class="container">
+    {{#each currentMap}}
+    <div class="row">
+
+        <form role="form" class="editMap">
+            <div class="col-lg-6">
+                <div class="well well-sm"><strong><span class="fa fa-asterisk"></span>Required Field</strong></div>
+                <div class="form-group">
+                    <label for="name">Map Name</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" value="{{name}}" required>
+                        <span class="input-group-addon"><span class="fa fa-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="info">World Story:</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="info" name="info" placeholder="Enter World Info" rows="5" value="{{info}}" required></textarea>
+                        <span class="input-group-addon"><span class="fa fa-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="iconStyle">Choose an Icon Style</label>
+                    <div class="input-group">
+
+                        <label for="iconStyle" class="radio-inline control-label">
+							<input class="" type="radio" name="iconStyle" value="iconStyle1" checked="{{#if isIcon 'iconStyle1'}}checked{{/if}}" required>Style 1</label>
+						<label for="iconStyle" class="radio-inline control-label disabled">
+							<input class="" type="radio" name="iconStyle" value="iconStyle2" disabled>Style 2</label>
+						<label for="iconStyle" class="radio-inline control-label disabled">
+							<input class="" type="radio" name="iconStyle" value="iconStyle3" disabled>Style 3</label>
+                        <span class="input-group-addon"><span class="fa fa-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="protection">Set Protection</label>
+                    <div class="input-group">
+                        <select class="form-control" name="protection" id="protection" required >
+                  			<option value="public" selected="{{#if isProtection 'public'}}selected{{/if}}{{#unless protection}}selected{{/unless}}">Public</option>
+                  			<option value="unlisted" selected="{{#if isProtection 'unlisted'}}selected{{/if}}">Unlisted</option>
+                  			<option value="private" selected="{{#if isProtection 'private'}}selected{{/if}}">Private</option>
+            			</select>
+                        <span class="input-group-addon"><span class="fa fa-asteriskk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="userPosts">Allow Users to Add to Map</label>
+                    <div class="input-group">
+						  <input class="form-control userPosts" id="userPosts" name="userPosts" type="checkbox" value="userPosts" checked="{{#if userPosts}}checked{{/if}}" />
+                    </div>
+                </div>
+                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info">
+            </div>
+        </form>
+        
+    </div>
+    {{#if isProtection 'private'}}
+    <div class="row">
+        {{> invitationsTemplate}}
+    </div>
+    {{/if}}
+    {{/each}}
+
+</div>
+{{/if}}
+</template>

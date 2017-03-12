@@ -1,0 +1,43 @@
+<template name="notifications">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    Notifications
+    {{#if notificationCount}}
+      <span class="badge badge-inverse">{{notificationCount}}</span>
+    {{/if}}
+    <b class="caret"></b>
+  </a>
+  <ul class="notification dropdown-menu">
+    {{#if notificationCount}}
+      {{#each notifications}}
+	        {{> notification}}
+      {{/each}}
+    {{else}}
+      <li><span>No Notifications</span></li>
+    {{/if}}
+  </ul>
+</template>
+
+<template name="notification">
+  <li>
+    <a href="{{mapURL}}">
+    {{#if isType 'marker'}}
+      <strong>{{markerAuthor}}</strong> posted a story on {{mapName}}
+    {{/if}}
+    {{#if isType 'invite'}}
+      <strong>{{markerAuthor}}</strong> accepted your invite to join {{mapName}}
+    {{/if}}
+    {{#if isType 'flag'}}
+      <strong>{{markerAuthor}}</strong> flagged a {{mediumType}} on {{mapName}}. This has been flagged {{flagCount}} times.
+    {{/if}}    
+    {{#if isType 'markerComment'}}
+      <strong>{{commentAuthor}}</strong> commented on {{markerTitle}} in {{mapName}}
+    {{/if}}
+    {{#if isType 'mapComment'}}
+      <strong>{{commentAuthor}}</strong> commented on {{mapName}}
+    {{/if}}
+    {{#if isType 'markerLike'}}
+      <strong>{{commentAuthor}}</strong> liked your story {{markerTitle}} in {{mapName}}
+    {{/if}}
+    </a>
+  </li>
+</template>

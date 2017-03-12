@@ -1,0 +1,134 @@
+#container {
+  width: 100%;
+  height: 100%;
+  margin: 15px auto 0 auto;
+}
+
+.map {
+  border: solid 1px black;
+}
+
+#map{
+	height:600px;
+}
+
+.title {
+  margin-top: 0; 
+  margin-bottom: 10px; 
+  text-align: center;
+}
+
+.notice {
+  margin: 10px 0 5px 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media all and (max-width: 480px) {
+  /* styles for iPhone/Android landscape (and really narrow browser windows) */
+  .notice {
+    font-size: 11px;
+  }
+}
+
+@media all and (max-width: 320px) {
+  /* styles for iPhone/Android portrait */
+  .notice {
+      font-size: 11px;
+  }
+}
+
+@media all and (max-width: 240px) {
+  /* styles for smaller devices */
+  .notice{
+    font-size: 11px;
+  }
+}
+
+.sidebar.collapsed{
+	display:none;
+}
+
+.newMap{
+  margin: 0 auto;
+}
+
+.cardContainer {
+
+}
+
+.card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    margin: 10px 0px
+}
+
+.card img {
+  width: 100%;
+
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.cardInfo {
+    padding: 2px 16px;
+}
+
+.mini-card-container{
+  min-width: 160px;
+}
+
+.mini-card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    margin: 2px 0px;
+  display: flex;
+  flex-flow: row nowrap;
+  min-height: 100%;
+
+  padding: 0;
+
+}
+.mini-card:hover {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+}
+
+.mini-card img{
+  width:100%;
+  object-fit: cover;
+  left: 0;
+  
+}
+
+.mini-card-photo{
+  align-self: center;
+  flex: 1 1 auto;
+  overflow: hidden;
+ 
+}
+.mini-card-info{
+flex: 12 1 auto;
+padding: 3px;
+}
+
+.list-group-item:hover {
+  background-color: #eee; /* or whatever color you'd like */
+}
+
+.full-right{
+  right:0;
+  float:right;
+}
+
+.searchResultsNav{
+  position: absolute;
+  z-index: 100;
+  margin-top: 35px;
+
+}

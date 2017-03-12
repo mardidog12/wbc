@@ -1,0 +1,24 @@
+<template name="search">
+  {{> EasySearch.Input noDocumentsOnEmpty='true' attributes=inputAttributes index=mapDBIndex}}
+
+
+
+{{#EasySearch.IfInputEmpty index=mapDBIndex}}
+{{else}}
+ <div class="list-group full-right searchResultsNav">
+    {{#EasySearch.Each index=mapDBIndex}}
+      {{#if isProtection 'public'}}
+      <a href="/map/{{creator}}/{{_id}}" class="list-group-item list-group-item-action"><strong>{{name}}</strong> by {{creator}}</a>
+      {{/if}}
+    {{/EasySearch.Each}}
+</div>
+{{/EasySearch.IfInputEmpty}}
+
+  {{> EasySearch.LoadMore index=mapDBIndex}}
+
+  {{#EasySearch.IfNoResults index=mapDBIndex}}
+    <div class="no-results">No results found!</div>
+  {{/EasySearch.IfNoResults}}
+
+  {{> EasySearch.LoadMore index=mapDBIndex content="Load more content"}}
+</template>

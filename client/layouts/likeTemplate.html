@@ -1,0 +1,10 @@
+<template name="likeTemplate">
+{{#if isLike}}
+<i role="button" style="color:red" class="fa fa-heart fa-2x addLike" aria-hidden="true"></i>
+{{else}}
+<i role="button" class="fa fa-heart fa-2x addLike" aria-hidden="true"></i>
+{{/if}}
+{{#if likesCount}}
+{{likesCount}}
+{{/if}}
+</template>

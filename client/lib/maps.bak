@@ -1,0 +1,369 @@
+
+// create marker collection
+var Markers = new Meteor.Collection('markers');
+
+Meteor.subscribe('markers');
+
+//sidebar helper
+function isHidden(){
+    	var hidden;
+    	if (hidden != 'hidden'){
+    		hidden = 'hidden';
+    	}else{
+    		hidden = '';
+    	}
+      return hidden;
+
+}
+
+//find marker info
+function markerInfo(id){
+
+	var marker = Markers.find({_id: id}).fetch();
+	//Session.set({
+	//	_id: marker[0]['_id'],
+	//	owner: marker[0]['owner']
+	//});
+
+
+}
+
+	function removeMarkerById(id){
+	    Markers.remove({_id: id});
+	}
+
+
+
+
+Template.sidebar.helpers({
+	markerInfo(){
+		var id = Session.get('id');
+		markers = Markers.find({_id: id}).fetch();
+		return markers;
+	},
+	author(){
+		var user_id = markers[0]['user_id'];
+
+		var query = Meteor.users.find({_id: user_id}).fetch();
+
+		return query;
+	},
+	city(){
+		if (Session.get('newMarkerType') == 'city'){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	place(){
+		if (Session.get('newMarkerType') == 'place'){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	culture(){
+		if (Session.get('newMarkerType') == 'culture'){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	event(){
+		if (Session.get('newMarkerType') == 'event'){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	war(){
+		if (Session.get('newMarkerType') == 'war'){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	sidebarTab(){
+
+		return (Session.get('sidebarTab'));
+	}
+});
+
+function currentAuthor(){
+		let id = Session.get('id');
+		let markers = Markers.find({_id: id}).fetch();
+		let user_id = markers[0]['user_id'];
+
+
+		//let query = Meteor.users.find({_id: user_id}).fetch();
+		if(user_id == Meteor.userId()){
+
+			return true;
+		}else{
+
+			return false;
+		}
+}
+
+Template.editDeleteMarkers.helpers({
+isAuthor(){
+			let id = Session.get('id');
+		let markers = Markers.find({_id: id}).fetch();
+		let user_id = markers[0]['user_id'];
+
+
+		//let query = Meteor.users.find({_id: user_id}).fetch();
+		if(user_id == Meteor.userId()){
+
+			return true;
+		}else{
+
+			return false;
+		}
+		},
+
+});
+
+Template.editDeleteMarkers.events({
+	'click .delete'(event){	
+		if(currentAuthor()){
+			event.preventDefault();
+			const id = Session.get('id');
+			Markers.remove({_id: id});
+						var sidebar = L.control.sidebar('sidebar');
+			sidebar.close();
+		}
+
+	},
+	'click .edit'(event){	
+		if(currentAuthor()){
+			event.preventDefault();
+			var sidebar = L.control.sidebar('sidebar');
+			sidebar.open('editMarker');
+
+		}
+
+	},	
+});
+
+//Add marker form
+Template.sidebar.events({ 
+	'submit .addMarker'(event){
+		event.preventDefault();
+		const target = event.target;
+		const title = target.title.value;
+		const info = target.info.value;
+		const type = target.type.value;
+		const startDate = target.startDate.value;
+		const endDate = target.endDate.value;
+		Markers.insert({title: title, info: info, type: type, startDate: startDate, endDate: endDate, createdAt: new Date(), latlng: Session.get('latlng'), map_id: Session.get('map_id'), user_id: Meteor.userId()});
+		target.title.value = '';
+		target.info.value = '';
+		target.type.value = 'select an option';
+		target.startDate.value = '';
+		target.endDate.value = '';
+			var sidebar = L.control.sidebar('sidebar');
+			sidebar.close();
+
+	},
+		'submit .editMarker'(event){
+		event.preventDefault();
+		const target = event.target;
+		const title = target.title.value;
+		const info = target.info.value;
+		const type = target.type.value;
+		const startDate = target.startDate.value;
+		const endDate = target.endDate.value;
+		Markers.update({_id: Session.get('id')}, {$set: {title: title, info: info, type: type, startDate: startDate, endDate: endDate, updatedAt: new Date()}});
+		target.title.value = '';
+		target.info.value = '';
+		target.type.value = 'select an option';
+		target.startDate.value = '';
+		target.endDate.value = '';
+		var sidebar = L.control.sidebar('sidebar');
+		sidebar.open('markerInfo');
+
+	},
+	"change #type": function(event){
+    	var selectValue = $(event.target).val();
+    	Session.set({newMarkerType: selectValue});
+    	console.log(Session.get('newMarkerType'))
+    }
+});
+
+
+Template.map.helpers({
+	username(){
+		return FlowRouter.getParam('username');
+	}
+
+});
+
+Template.map.rendered = function() {
+
+
+
+
+	//mapPathVariable
+	var mapPath = FlowRouter.getParam('username')
+	var mapId = FlowRouter.getParam('username')
+
+
+	//Icons
+ 	L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images/';
+
+ 	//city
+ 	var cityIcon = L.icon({
+	    iconUrl: '/icons/city.png',
+
+	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+ 	var cultureIcon = L.icon({
+	    iconUrl: '/icons/culture.png',
+
+	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+ 	var eventIcon = L.icon({
+	    iconUrl: '/icons/event.png',
+
+	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+ 	var placeIcon = L.icon({
+	    iconUrl: '/icons/place.png',
+
+	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+ 	var warIcon = L.icon({
+	    iconUrl: '/icons/war.png',
+
+	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+
+	var map = L.map('map', {
+		doubleClickZoom: false
+	}).setView([0, 0], 2);
+
+
+	  //render map
+	L.tileLayer('/tiles/' + mapPath + '/{z}/{x}/{y}.png', {
+	    minZoom: 1,
+	    maxZoom: 3,
+	    noWrap: true,
+	    tms: true
+	}).addTo(map);
+
+		//remove marker
+	function removeMarker(marker, id){
+		map.removeLayer(marker);
+	    Markers.remove({_id: id});
+	}
+
+
+	  //sidebar
+	var sidebar = L.control.sidebar('sidebar');
+	sidebar.addTo(map);
+
+	//clicking actions
+
+	if(Meteor.userId()){
+		var newEventMarker;
+	  	map.on('dblclick', function(event) {
+	  	  	isHidden();
+			sidebar.open('addMarker');
+			Session.set({sidebarTab: 'addMarker'});
+			
+			if(typeof(newEventMarker)=='undefined'){
+				newEventMarker = L.marker(event.latlng);
+				newEventMarker.addTo(map);
+			}else{
+				newEventMarker.setLatLng(event.latlng);
+			}
+			Session.set({latlng: event.latlng, map_id: mapId});
+	    	//Markers.insert({latlng: event.latlng, map_id: mapOwner, user_id: Meteor.userId()});
+	  	});
+	}else{
+	  	map.on('dblclick', function(event) {
+	  		mustLogIn();
+
+	  	});
+
+	}
+
+	map.on('click', function(event) {
+		isHidden();
+	    if(sidebar.open()){
+	   		sidebar.close();
+	    }else{
+	    }
+
+	});
+
+
+	var query = Markers.find();
+	query.observe({
+	    added: function (document) {
+	    	let iconType;
+	    	if(document.type){
+			 	var varIcon = L.icon({
+				    iconUrl: '/icons/'+document.type+'.png',
+
+				    iconSize:     [32, 37], // size of the icon
+				    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+				    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+				});
+	    	}
+	      var marker = L.marker(document.latlng, {icon: varIcon}).addTo(map)
+	        .on('click', function(event) {
+
+	        			console.log(iconType);
+	        			var id = document._id;
+	        			Session.set({id: id});
+	        			//markerInfo(id);
+	        			sidebar.open('markerInfo');
+	        			Session.set({sidebarTab: 'markerInfo'});
+	        			//removeMarker(marker, id);
+
+
+	        });
+	    },
+	    changed: function (newDocument, oldDocument) {
+	    	if(oldDocument.type != newDocument.type){
+	    		var varIcon = L.icon({
+				    iconUrl: '/icons/'+newDocument.type+'.png',
+
+				    iconSize:     [32, 37], // size of the icon
+				    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+				    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+				});
+	    	}
+
+	      var marker = L.marker(oldDocument.latlng, {icon: varIcon});
+	      map.removeLayer(marker);
+	      var marker = L.marker(newDocument.latlng, {icon: varIcon});
+	      marker.addTo(map);
+
+	    },
+	    removed: function (oldDocument) {
+	      layers = map._layers;
+	      var key, val;
+	      for (key in layers) {
+	        val = layers[key];
+	        if (val._latlng) {
+	          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+	            map.removeLayer(val);
+	          }
+	        }
+	      }
+	    }
+	  });
+};

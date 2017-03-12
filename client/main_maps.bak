@@ -1,0 +1,250 @@
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+//import './main.html';
+
+//ready
+
+//routing
+
+Router.configure({
+	layoutTemplate: 'ApplicationLayout'
+});
+
+//route home
+
+Router.route('/', function () {
+  this.render('navbar', {
+  	to:"navbar"
+  });
+  this.render('sidebar', {
+  	to:"sidebar"
+  });
+  this.render('homepage', {
+  	to:"main"
+  });  
+});
+
+//route map
+Router.route('/map/:username', function () {
+  this.render('navbar', {
+  	to:"navbar"
+  });
+    this.render('sidebar', {
+  	to:"sidebar"
+  });
+
+var qUser = Meteor.users.findOne({username:this.params.username});
+  if (!qUser){
+  	this.render('noUser', {
+  		to:"main"
+  });
+  }else{
+  	this.render('map', {
+  		to:"main",
+  		data: function(){
+  			username: this.params.username;
+  			return Meteor.users.findOne({username:this.params.username});
+  		}
+  	});  	
+  } 
+});
+
+//route profile
+
+Router.route('/user/:username', function () {
+  this.render('navbar', {
+  	to:"navbar"
+  });
+  var qUser = Meteor.users.findOne({username:this.params.username});
+  if (!qUser){
+  	this.render('noUser', {
+  		to:"main"
+  });
+  }else{
+  	this.render('user', {
+  		to:"main",
+  		data: function(){
+  			return Meteor.users.findOne({username:this.params.username});
+  		}
+  	});  	
+  }
+  
+});
+
+//Account Config
+
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+});
+
+//Toastr Messages
+
+function mustLogIn(){
+	toastr["warning"]('<div>You must log in to do that</div>')
+  		toastr.options = {
+			  "closeButton": true,
+			  "debug": false,
+			  "newestOnTop": false,
+			  "progressBar": true,
+			  "positionClass": "toast-top-full-width",
+			  "preventDuplicates": false,
+			  "onclick": null,
+			  "showDuration": "300",
+			  "hideDuration": "1000",
+			  "timeOut": "5000",
+			  "extendedTimeOut": "1000",
+			  "showEasing": "swing",
+			  "hideEasing": "linear",
+			  "showMethod": "fadeIn",
+			  "hideMethod": "fadeOut"
+		}
+}
+
+//Maps
+
+ Meteor.startup(function() {
+  $(window).resize(function() {
+    $('#map').css('height', window.innerHeight - 82 - 45);
+  });
+  $(window).resize(); // trigger resize event 
+});
+ 
+// create Maps collection
+var Maps = new Meteor.Collection('maps');
+
+Meteor.subscribe('maps');
+
+//sidebar helper
+function isHidden(){
+    	var hidden;
+    	if (hidden != 'hidden'){
+    		hidden = 'hidden';
+    	}else{
+    		hidden = '';
+    	}
+      return hidden;
+
+}
+
+//find marker info
+function markerInfo(id){
+
+	var marker = Maps.find({markers: {_id: id}}).fetch();
+	//Session.set({
+	//	_id: marker[0]['_id'],
+	//	owner: marker[0]['owner']
+	//});
+
+
+}
+
+Template.sidebar.helpers({
+	markerInfo: function(){
+		var id = Session.get('id');
+		return Maps.find({_id: 1}, {markers: {_id: id}}).fetch();
+	}
+
+
+});
+
+
+Template.map.rendered = function() {
+
+	//remove marker
+	function removeMarker(marker, id){
+		map.removeLayer(marker);
+	    Maps.remove({marker: {_id: id}});
+	}
+
+
+	//mapOwnerVariable
+	var mapOwner = Template.instance().data.username;
+
+
+
+ 	L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images/';
+
+	var map = L.map('map', {
+		doubleClickZoom: false
+	}).setView([0, 0], 2);
+
+
+	  //render map
+	L.tileLayer('/tiles/' + mapOwner + '/{z}/{x}/{y}.png', {
+	    minZoom: 1,
+	    maxZoom: 3,
+	    noWrap: true,
+	    tms: true
+	}).addTo(map);
+
+	  //sidebar
+	var sidebar = L.control.sidebar('sidebar').addTo(map);
+
+	//clicking actions
+
+	if(Meteor.userId()){
+	  	map.on('dblclick', function(event) {
+	  	  	isHidden();
+			sidebar.open('addMarker');
+	    	Maps.update({_id: 1}, {$push: {markers: {$each: [{_id: Random.id(), createdat: new Date(), latlng: event.latlng, map_id: mapOwner, user_id: Meteor.userId()}]}}});
+	  	});
+	}else{
+	  	map.on('dblclick', function(event) {
+	  		mustLogIn();
+
+	  	});
+
+	}
+
+	map.on('click', function(event) {
+		isHidden();
+	    if(sidebar.open()){
+	   		sidebar.close();
+	    }else{
+	    }
+
+	});
+
+
+	var query = Maps.find({_id: 1}, {'markers': 1, '_id': 0});
+
+
+	console.info(query2.fetch());
+
+	query.observe({
+	    added: function (document) {
+	    		console.info(document);
+	      var marker = L.marker(document.latlng).addTo(map)
+	        .on('click', function(event) {
+	        	if(Meteor.userId()){
+
+
+	        			var id = document._id;
+	        			Session.set({id: id});
+	        			//markerInfo(id);
+	        			sidebar.open('markerInfo');
+	        			//removeMarker(marker, id);
+
+	        		
+	        	}else{
+	        		mustLogIn();
+	        	}
+
+	        });
+	    },
+	    removed: function (oldDocument) {
+	      layers = map._layers;
+	      var key, val;
+	      for (key in layers) {
+	        val = layers[key];
+	        if (val._latlng) {
+	          if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
+	            map.removeLayer(val);
+	          }
+	        }
+	      }
+	    }
+	  });
+};
+
+

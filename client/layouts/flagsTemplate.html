@@ -1,0 +1,28 @@
+<template name="flagsTemplate">
+<div class="flag-container">
+	<div class="dropdown">
+	  <i role="button" class="dropdown-toggle fa fa-flag" aria-hidden="true" type="button" data-toggle="dropdown"></i>
+	  <ul class="dropdown-menu">
+		  <form class="flag" role="form" name="flag">
+		            <div class="radio">
+					  <label><input type="radio"  class="radiobtn" name="optradio" value="offensive">Offensive Content</label>
+					</div>
+					<div class="radio">
+					  <label><input type="radio"  class="radiobtn" name="optradio" value="spam">Spam/Advertising</label>
+					</div>
+					<div class="radio">
+					  <label><input type="radio"  class="radiobtn" name="optradio" value="quality" >Low Quality Content</label>
+					</div>
+					<div class="radio">
+					  <label><input type="radio"  class="radiobtn other" name="optradio" value="other" >Other</label>
+					</div>
+						<input type="text" name="other" id="other" class="otherText form-control" disabled>
+						<input type="hidden"  class="flagType" name="flagType" value="{{_id}}" >
+		            <div class="form-group">
+		                <input type="submit" class="btn btn-danger" value="Report">
+		            </div>
+	        	</form>
+	  </ul>
+	</div>
+</div>
+</template>

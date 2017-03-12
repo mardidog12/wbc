@@ -1,0 +1,49 @@
+<template name="user">
+<div class="container">
+	<div class="profileCover col-sm-12">
+		<h1>{{username}}'s profile</h1>
+	</div>
+  <div class="profileMain col-md-10 col-md-push-2 col-sm-12">
+  	{{> userProfileCards}}
+  </div>
+  <div class="profileSidebar col-md-2 col-md-pull-10 col-sm-12">
+  	<h4>Subscribed Worlds</h4>
+  		{{> subscribedWorlds}}
+  	<h4>Latest Stories</h4>
+  		{{> latestStories}}
+  </div>
+</div>
+
+
+</template>
+
+<template name="subscribedWorlds">
+{{#each subscriptions}}
+	<a href="/map/{{userProfile}}/{{_id}}"><div class="mini-card-container">
+		<div class="mini-card col-sm-12">
+			<div class="mini-card-photo col-sm-3 col-md-3 col-lg-3 pull-left">
+				<img src="/tiles/map_1024.png" alt="mapImage">
+			</div>
+			<div class="mini-card-info col-sm-9 col-md-9 col-lg-9 pull-left">
+				<h6>{{name}}</h6>
+			</div>
+		</div>
+	</div></a>
+{{/each}}
+</template>
+
+<template name="latestStories">
+{{#each stories}}
+	<a href="/map/{{userProfile}}/{{map_id}}#markerInfo"><div class="mini-card-container">
+		<div class="mini-card col-sm-12">
+			<div class="mini-card-photo col-sm-3 col-md-3 col-lg-3">
+				<h6>{{title}}</h6>
+			</div>
+			<div class="mini-card-info col-sm-9 col-md-9 col-lg-9">
+				{{info}}
+			</div>
+		</div>
+	</div></a>
+{{/each}}
+
+</template>

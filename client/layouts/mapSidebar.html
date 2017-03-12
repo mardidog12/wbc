@@ -1,0 +1,163 @@
+<template name="sidebar">
+ <div id="sidebar" class="sidebar collapsed {{isHidden}}">
+        <!-- Nav tabs -->
+        <ul class="sidebar-tabs" role="tablist">
+            <li><a href="#{{sidebarTab}}" role="tab"><i class="fa fa-times"></i></a></li>
+            <li><a href="#worldInfo" role="tab"><i class="fa fa-globe"></i></a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content active">
+            <div class="sidebar-pane" id="worldInfo">
+                <h1>World Name</h1>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div class="sidebar-pane form-group" id="addMarker">
+              <form class="addMarker">
+                  <label for="type">Type:</label>
+                  <select class="form-control" name="type" id="type" required >
+                  <option disabled selected value>select an option</option>
+                    <option value="city">City/Town</option>
+                    <option value="place">Landmark</option>
+                    <option value="culture">People/Culture</option>
+                    <option value="event">Notable Event</option>
+                    <option value="war">War</option>
+                  </select>
+                  <label for="title">Title:</label>
+                  <input type="text" id="title" name="title" required /><br />
+                  <label for="info">Info:</label>
+                  <textarea name="info" rows="5" id="info"></textarea><br />
+                  {{#if city}}
+                    <label for="startDate">Founded:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Destroyed:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  {{#if place}}
+                    <label for="startDate">Discovered:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Destroyed:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  {{#if culture}}
+                    <label for="startDate">Started:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  {{#if event}}
+                    <label for="startDate">Began:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  {{#if war}}
+                    <label for="startDate">Started:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  <label for="imageUpload">Upload a Image: </label>
+                  {{> uploadForm}}
+                  <input type="submit" value="Add Pin" />
+              </form>            
+            </div>
+            <div class="sidebar-pane" id="markerInfo">
+              {{#each markerInfo}}
+                <h3>Title: {{title}}</h3>{{> flagsTemplate}}
+                {{#if imgId}}
+                <a href="/uploads/images/{{imgId}}"><img class="img-thumbnail" src="/uploads/images/{{imgId}}" /></a>
+                {{/if}}
+                <p>info: <small>{{#if startDate}}{{startDate}}{{/if}} {{#if endDate}}– {{endDate}} {{/if}}</small> {{info}}</p>
+                Type: {{type}}
+                {{#each author}}
+                  Author: {{username}}<br />
+                {{/each}}
+                <small>id: {{_id}}</small>
+                <br />
+                {{/each}}
+                {{> likeTemplate}}
+                  <br />
+                  {{> editDeleteMarkers}}
+                  <br />
+                  {{> commentTemplate}}
+            </div>
+            <div class="sidebar-pane form-group" id="editMarker">
+              <form class="editMarker">
+              {{#each markerInfo}}
+                  <label for="type">Type:</label>
+                  <select class="form-control" name="type" id="type" required >
+                  <option disabled value>select an option</option>
+                  {{#if equals type 'city'}}
+                  <option value="city" selected>City/Town</option>
+                  {{else}}
+                  <option value="city">City/Town</option>{{/if}}
+                  {{#if equals type 'place'}}  
+                    <option value="place" selected>Landmark</option>
+                  {{else}}
+                  <option value="place">Landmark</option>
+                  {{/if}}
+                  {{#if equals type 'culture'}}
+                    <option value="culture" selected>People/Culture</option>
+                  {{else}}
+                  <option value="culture">People/Culture</option>
+                  {{/if}}
+                  {{#if equals type 'event'}}                    
+                    <option value="event" selected>Notable Event</option>
+                  {{else}}
+                  <option value="event">Notable Event</option>
+                  {{/if}}
+                  {{#if equals type 'war'}}                    
+                    <option value="war" selected>War</option>
+                  {{else}}
+                  <option value="war">War</option>
+                  {{/if}}                   
+                  </select>
+                  <label for="title">Title:</label>
+                  <input type="text" id="title" name="title" value="{{title}}" required /><br />
+                  <label for="info">Info:</label>
+                  <textarea name="info" rows="5" id="info">{{info}}</textarea><br />
+                  {{#if city}}
+                    <label for="startDate">Founded:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}" />
+                    <label for="endDate">Destroyed:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{#if place}}
+                    <label for="startDate">Discovered:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
+                    <label for="endDate">Destroyed:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{#if culture}}
+                    <label for="startDate">Started:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{#if event}}
+                    <label for="startDate">Began:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{#if war}}
+                    <label for="startDate">Started:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
+                    <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{/each}}
+                  <input type="submit" value="Add Pin" />
+              </form>            
+            </div>            
+        </div>
+    </div>
+</template>

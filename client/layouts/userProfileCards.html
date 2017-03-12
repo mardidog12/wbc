@@ -1,0 +1,17 @@
+<template name="userProfileCards">
+ {{#each maps}}
+<!--Card-->
+<div class="cardContainer col-lg-4 col-md-6 col-sm-12">
+    <a href="/map/{{userProfile}}/{{_id}}"><div class="card">
+      <img src="/tiles/map_1024.png" alt="mapImage">
+      <div class="cardInfo">
+        <h4><b>{{name}}</b></h4> 
+        <p>{{info}}</p> 
+      </div>
+    </div></a>
+</div>
+
+<!--/.Card-->
+{{/each}}
+
+</template>

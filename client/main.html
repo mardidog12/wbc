@@ -1,0 +1,111 @@
+<head>
+  <title>wbc</title>
+</head>
+
+<body>
+
+</body>
+
+<template name="ApplicationLayout">
+  {{> Template.dynamic template=navbar}}
+  {{> Template.dynamic template=main}}
+
+</template>
+
+
+<template name="MapLayout">
+  {{> Template.dynamic template=navbar}}
+  {{> Template.dynamic template=sidebar}}
+  {{> Template.dynamic template=main}}
+
+</template>
+
+<template name="ProfileLayout">
+  {{> Template.dynamic template=navbar}}
+  {{> Template.dynamic template=main}}
+
+</template>
+
+<template name="imageView">
+<div class = "container-fluid">
+  <img class="img-responsive" src="/uploads/images/{{param}}" />
+</div>
+</template>
+
+<template name="navbar">
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">WBC</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="/">Home</a></li>
+      <li><a href="/map/create">Create A Map</a></li>
+      {{#if currentUser}}
+      <li><a href="/user/{{currentUser.username}}">{{currentUser.username}}</a></li>
+      <li class="dropdown">{{> notifications}}</li>
+      {{/if}}
+      <li><a>{{> atNavButton}}</a></li>
+    </ul>
+    {{> search}}
+    
+  </div>
+</nav>
+
+</template>
+
+
+
+<template name="editDeleteMarkers">
+  {{#if isAuthor}}
+ <input type="submit" class="delete" value="delete" /><input type="submit" class="edit" value="edit" />
+ {{/if}}
+</template>
+
+<template name="homepage">
+<div class="container">
+  {{> search}}
+  {{> subCount}}
+</div>
+
+</template>
+
+
+
+<template name="noUser">
+<div class="container">
+  <h1>Loading...</h1>
+</div>
+</template>
+
+<template name="notAuthorized">
+<div class="container">
+  <h1>Not Authorized</h1>
+</div>
+
+</template>
+
+
+
+<template name="404">
+    <div id="container">
+      <h1>Error 404 Page Not found</h1>
+
+    </div>
+</template>
+
+<!--<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template>
+
+<template name="info">
+  <h2>Learn Meteor!</h2>
+  <ul>
+    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
+    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
+    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
+    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
+  </ul>
+</template>-->
+
