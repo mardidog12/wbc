@@ -27,6 +27,7 @@
                     <option value="city">City/Town</option>
                     <option value="place">Landmark</option>
                     <option value="culture">People/Culture</option>
+                    <option value="character">Character</option>
                     <option value="event">Notable Event</option>
                     <option value="war">War</option>
                   </select>
@@ -50,6 +51,12 @@
                     <label for="startDate">Started:</label>
                     <input type="text" size="5" id="startDate" name="startDate" />
                     <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" /><br />
+                  {{/if}}
+                  {{#if character}}
+                    <label for="startDate">Born:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" />
+                    <label for="endDate">Died:</label>
                     <input type="text" size="5" id="endDate" name="endDate" /><br />
                   {{/if}}
                   {{#if event}}
@@ -109,6 +116,11 @@
                   {{else}}
                   <option value="culture">People/Culture</option>
                   {{/if}}
+                  {{#if equals type 'character'}}
+                    <option value="character" selected>Character</option>
+                  {{else}}
+                  <option value="character">Character</option>
+                  {{/if}}
                   {{#if equals type 'event'}}                    
                     <option value="event" selected>Notable Event</option>
                   {{else}}
@@ -140,6 +152,12 @@
                     <label for="startDate">Started:</label>
                     <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
                     <label for="endDate">Ended:</label>
+                    <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
+                  {{/if}}
+                  {{#if character}}
+                    <label for="startDate">Born:</label>
+                    <input type="text" size="5" id="startDate" name="startDate" value="{{startDate}}"/>
+                    <label for="endDate">Died:</label>
                     <input type="text" size="5" id="endDate" name="endDate" value="{{endDate}}"/><br />
                   {{/if}}
                   {{#if event}}

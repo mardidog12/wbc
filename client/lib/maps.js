@@ -75,6 +75,13 @@ Template.sidebar.helpers({
 			return false;
 		}
 	},
+	character(){
+		if (Session.get('newMarkerType') == 'character'){
+			return true;
+		}else{
+			return false;
+		}
+	},	
 	event(){
 		if (Session.get('newMarkerType') == 'event'){
 			return true;
@@ -155,6 +162,7 @@ Template.sidebar.events({
 		var marker = {title: title, info: info, type: type, startDate: startDate, endDate: endDate, imgId: imgId, createdAt: new Date(), latlng: Session.get('latlng'), map_id: Session.get('map_id'), user_id: Meteor.userId()};
 		
 		Markers.insert(marker);
+		MapDB.update({_id: Session.get('map_id')}, {$inc: {markerCount: 1}});
 		createMarkerNotification(marker);
 		target.title.value = '';
 		target.info.value = '';
@@ -292,6 +300,13 @@ function userPosts(){
 	    iconUrl: '/icons/culture.png',
 
 	    iconSize:     [32, 37], // size of the icon
+	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+	});
+ 	var characterIcon = L.icon({
+	    iconUrl: '/icons/character.png',
+
+	    iconSize:     [32, 32], // size of the icon
 	    iconAnchor:   [16, 37], // point of the icon which will correspond to marker's location
 	    popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
 	});

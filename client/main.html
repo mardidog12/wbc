@@ -39,8 +39,9 @@
       <a class="navbar-brand" href="/">WBC</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="/">Home</a></li>
-      <li><a href="/map/create">Create A Map</a></li>
+      <li class="active"><a href="/map/create">Create A World</a></li>
+      <li><a href="/">Browse</a></li>
+      
       {{#if currentUser}}
       <li><a href="/user/{{currentUser.username}}">{{currentUser.username}}</a></li>
       <li class="dropdown">{{> notifications}}</li>
@@ -64,8 +65,7 @@
 
 <template name="homepage">
 <div class="container">
-  {{> search}}
-  {{> subCount}}
+  {{> frontpage}}
 </div>
 
 </template>
